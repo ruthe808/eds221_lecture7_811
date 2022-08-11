@@ -1,0 +1,169 @@
+---
+title: "Day 4 - Lecture 7"
+author: "Ruth Enriquez"
+date: "2022-08-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+#a nested for loop example
+
+file_prefix <- c("temp", "ph", "salinity")
+file_suffix <- c(1, 2, 3, 4, 5)
+
+for (i in seq_along(file_prefix)) {
+  for (j in seq_along(file_suffix)) {
+    print(paste0(file_prefix[i], "_", file_suffix[j]))
+  }
+}
+```
+
+Slide: you try! what would be printed from...
+
+```{r}
+odds <- c(1, 3, 5)
+evens <-c(2, 4, 6, 8)
+
+for (i in seq_along(odds)) {
+  for (j in seq_along(evens)) {
+    print (odds[i] * evens[j])
+  }
+}
+```
+
+functions: self-contained bits of code that accept user input(s), do something with it, and return a useful output.
+
+you should consider writing a function whenever you've copied and pasted a block of code more than twice (i.e. you now have three copies of the same code)
+
+benefits of writing functions
+
+1.  you can give it a name and it can make things easier, give it a name to help yourself out
+2.  as requirements change, you only need to update code in one place, instead of many. you can just call it from where it was written
+
+Anatomy of a function - R
+
+```{r}
+function_name <- function(bird, dog) {
+  pets = bird + dog
+  return(pets)
+}
+```
+
+A function in R: that exclaims age input
+
+```{r}
+exclaim_age <- function(age){
+  print(paste("I am", age, "years old!"))
+}
+
+exclaim_age(age = 10)
+```
+
+the name of a function is important. Ideally, the name of your function will be short, but clearly evoke what the function does. That's hard! But it's better to be clear than short, as RStudio's autocomplete makes it easy to type long names.
+
+write a loop that returns your total time for any two consecutive quarter miles
+
+```{r}
+quarter_splits <-c(1.0, 1.1, 1.2, 1.1, 1.4, 1.5, 1.6, 1.4)
+
+for (i in seq_along(quarter_splits)) {
+  half_time <- quarter_splits[i] + quarter_splits[i + 1]
+  print(half_time)
+}
+
+```
+
+A function with conditions: we can combine what we've already learned when building new functions.
+
+What does this R function do?
+
+```{r}
+animal_age2 <- function(animal, age){
+  if (animal == "dog") {
+    print(age * 7)
+  } else if (animal == "goat") {
+    print(age * 4.7)
+  }
+}
+```
+
+Intro to functions
+double whatever value a user gives it
+
+```{r}
+double_this <- function(my_value) {
+  print(2 * my_value)
+}
+
+double_this(my_value = 200)
+double_this(200)
+
+double_this(c(1, 2, 10, 100, 175))
+```
+
+Your turn: Write a function that ask for a user's NAME and age, and returns an exclamation, like "I'm [NAME], and I am [age] years old."
+
+```{r}
+exclaim_age <- function(name, age){
+  print(paste("My name is", name, "and I am", age, "years old"))
+}
+
+exclaim_age(name = "Ruth", age = 27)
+```
+
+```{r}
+convert_animal_age <- function(animal, human_age) {
+  if (animal == "dog") {
+    print(human_age * 7)
+  } else if (animal == "goat") {
+    print(human_age * 4.7)
+  } else {
+    print("Please enter dog or goat for animal")
+  }
+}
+
+convert_animal_age(animal = "dog", human_age = 12)
+convert_animal_age(animal = "goat", human_age = 27)
+convert_animal_age(animal = "whale", human_age = 28)
+```
+
+Make a dataframe
+```{r}
+dog_choice <- tribble(
+  ~dog_name, ~food,
+  "Khora", "everything",
+  "Teddy", "salmon",
+  "Waffle", "pancakes",
+  "Banjo", "chicken"
+)
+
+dog_menu <- function(name) {
+  my_sub <- filter(dog_choice, dog_name == name)
+  print(paste("My name is", my_sub$dog_name, "and my favorite food is", my_sub$food))
+}
+
+dog_menu(name = "Waffle")
+
+```
+
+Functions meet for loops
+
+```{r}
+means_over_columns <- function(df) {
+  for (i in seq_along(df)) {
+    col_mean <- mean(df[[i]], na.rm = TRUE)
+    column_name <- colnames(df[i])
+    print(paste("The mean value of", column_name, "is", col_mean))
+  }
+}
+
+means_over_columns(df = mtcars)
+means_over_columns(df = faithful)
+
+```
+
